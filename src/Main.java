@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class Main{
 	
+	static boolean matou=false;
+	
 	static char ambiente2[][] = new char[4][4];
 	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente
 	
@@ -378,8 +380,6 @@ public class Main{
 			
 			if(!compare(areas_seguras, p)){
 				
-				System.out.println("Posicao segura inserida! Linha 348");
-				
 				areas_seguras.add(p);
 				
 				Position te = new Position();
@@ -443,7 +443,6 @@ public class Main{
 		
 		if(brizas[p.row][p.col]=='F'){
 			if(!compare(areas_seguras, p)){
-				System.out.println("Posicao segura inserida! Linha 410");
 				areas_seguras.add(p);
 			}
 		}
@@ -451,7 +450,6 @@ public class Main{
 		if(brizas[p.row][p.col]!='B' && ambiente[p.row][p.col]!='F' && brizas[p.row][p.col]=='-'){
 			
 			if(!compare(areas_seguras, p)){
-				System.out.println("Posicao segura inserida! Linha 418");
 				areas_seguras.add(p);
 			}
 			
@@ -465,7 +463,6 @@ public class Main{
 				temp.row = p.row;
 				
 				if(!compare(areas_seguras, temp)){
-					System.out.println("Posicao segura inserida! Linha 432");
 					areas_seguras.add(temp);
 				}
 				
@@ -478,7 +475,6 @@ public class Main{
 				temp.row = p.row;
 				
 				if(!compare(areas_seguras, temp)){
-					System.out.println("Posicao segura inserida! Linha 445");
 					areas_seguras.add(temp);
 				}
 				
@@ -632,27 +628,35 @@ public class Main{
 		
 		if(fedor[p.row][p.col]=='F'){
 			
-			imaginacaoWumpus[p.row][p.col] = 'F';
+			imaginacaoWumpus[p.row][p.col]='F';
 			
-			if(p.row>0){
+			if(p.row>0 && imaginacaoWumpus[p.row-1][p.col]=='0'){
 				imaginacaoWumpus[p.row-1][p.col] = 'W';
 			}
-			if(p.row<3){
+			
+			if(p.row<3 && imaginacaoWumpus[p.row+1][p.col]=='0'){
 				imaginacaoWumpus[p.row+1][p.col] = 'W';
 			}
-			if(p.col>0){
+			
+			if(p.col>0 && imaginacaoWumpus[p.row][p.col-1]=='0'){
 				imaginacaoWumpus[p.row][p.col-1] = 'W';
 			}
-			if(p.col<3){
+			
+			if(p.col<3 && imaginacaoWumpus[p.row][p.col+1]=='0'){
 				imaginacaoWumpus[p.row][p.col+1] = 'W';
 			}
 			
 		}
+		
 		if(ambiente2[p.row][p.col]=='-'){
 			imaginacaoWumpus[p.row][p.col] = '-';
 		}
+		
 		if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]!='F'){
 			imaginacaoWumpus[p.row][p.col] = '-';
+		}
+		else if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]=='F'){
+			imaginacaoWumpus[p.row][p.col] = 'F';
 		}
 		
 		for(int i=0; i<4; i++){
@@ -752,6 +756,80 @@ public class Main{
 			areas_visitadas.add(p);
 		
 		// Então agora vamos movimentar o agente
+		
+		int countWumpus=0;
+		int xWumpus=-1;
+		int yWumpus=-1;
+		
+		for(int i=0; i<4; i++){
+			
+			for(int j=0; j<4; j++){
+				
+				if(imaginacaoWumpus[i][j]=='W'){
+					countWumpus++;
+					xWumpus =  i;
+					yWumpus = j;
+				}
+				
+			}
+			
+		}
+		
+		if(countWumpus==1){
+			
+			System.out.println("Rodrigo, eu sei onde está o Wumpus. Vou matá-lo!");
+			
+			ambiente[p.row][p.col] = ambiente2[p.row][p.col];
+			
+			ambiente[xWumpus][yWumpus] = 'G';
+			
+			matou=true;
+			
+			Position Wumpus = new Position();
+			Wumpus.row = xWumpus;
+			Wumpus.col = yWumpus;
+			
+			areas_seguras.add(Wumpus);
+			
+			ambiente2[xWumpus][yWumpus] = '-';
+			
+			for(int i=0; i<4; i++){
+				
+				for(int j=0; j<4; j++){
+					
+					fedor[i][j]='-';
+					
+					if(ambiente[i][j]=='F'){
+						
+						Position novo = new Position();
+						
+						novo.row = i;
+						novo.col = j;
+						
+						areas_seguras.add(novo);
+						
+						ambiente[i][j] = '-';
+						ambiente2[i][j] = '-';
+						
+					}
+					
+				}
+				
+			}
+			
+			for(int i=0; i<4; i++){
+				
+				for(int j=0; j<4; j++){
+					
+					imaginacaoWumpus[i][j]='0';
+					
+				}
+				
+			}
+			
+			return ambiente;
+			
+		}
 		
 		if(fedor[p.row][p.col]=='F'){
 			
@@ -1106,7 +1184,7 @@ public class Main{
 			}
 		}
 		
-		if(ambiente[row][col]=='G' && ambiente2[row][col]=='W'){
+		if(ambiente[row][col]=='G' && ambiente2[row][col]=='W' && matou==false){
 			System.out.println("Wumpus matou o guerreiro!");
 			return true;
 		}
