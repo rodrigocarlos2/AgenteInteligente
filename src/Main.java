@@ -7,6 +7,7 @@
 // E-mail: rocaleal98@gmail.com
 // PS: if want use the code, contact me in e-mail.
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -853,8 +854,67 @@ public class Main{
 		// Então agora vamos movimentar o agente
 		
 		int countWumpus=0;
+		
+		int count_fedor=0;
+		
+		ArrayList<Position> pontos = new ArrayList<Position>();
+		
 		int xWumpus=-1;
 		int yWumpus=-1;
+		
+		for(int i=0; i<4; i++){
+			
+			for(int j=0; j<4; j++){
+				
+				if(imaginacaoWumpus[i][j]=='F'){
+					count_fedor++;
+					Position temp = new Position();
+					temp.row=i;
+					temp.col=j;
+					pontos.add(temp);
+				}
+				
+			}
+			
+		}
+		
+		if(count_fedor==2){
+			
+			Position ponto1 = pontos.get(0);
+			Position ponto2 = pontos.get(1);
+			
+			if(imaginacaoWumpus[ponto2.row][ponto1.col]=='W' && (imaginacaoWumpus[ponto1.row][ponto2.col]!='0' && imaginacaoWumpus[ponto1.row][ponto2.col]!='W')){
+				
+				for(int i=0; i<4; i++){
+					
+					for(int j=0; j<4; j++){
+						
+						if(imaginacaoWumpus[i][j]=='W' && (i!=ponto2.row || j!=ponto1.col)){
+							imaginacaoWumpus[i][j]='N';
+						}
+						
+					}
+					
+				}
+				
+			}
+			else if(imaginacaoWumpus[ponto1.row][ponto2.col]=='W' && (imaginacaoWumpus[ponto2.row][ponto1.col]!='0' && imaginacaoWumpus[ponto2.row][ponto1.col]!='W')){
+				
+				for(int i=0; i<4; i++){
+					
+					for(int j=0; j<4; j++){
+						
+						if(imaginacaoWumpus[i][j]=='W' && (i!=ponto1.row || j!=ponto2.col)){
+							imaginacaoWumpus[i][j]='N';
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
 		
 		for(int i=0; i<4; i++){
 			
@@ -894,7 +954,7 @@ public class Main{
 					
 					fedor[i][j]='-';
 					
-					if(ambiente[i][j]=='F'){
+					if(ambiente[i][j]=='F' || ambiente2[i][j]=='F'){
 						
 						Position novo = new Position();
 						
@@ -1213,6 +1273,9 @@ public class Main{
 				}
 					
 				System.out.println("Rodrigo não sei para onde ir!");
+				
+				// Guerreiro não sabe para onde ir
+				// Então ele escolhe uma das áreas seguras
 					
 				if(is_different(areas_seguras, areas_possiveis)){
 					
@@ -1221,6 +1284,19 @@ public class Main{
 					int pos = random(areas_possiveis.size());
 							
 					Position nova = areas_possiveis.get(pos);
+					
+					if(nova.row==p.row && nova.col==p.col){
+						
+						pos = random(areas_possiveis.size());
+						
+						nova = areas_possiveis.get(pos);
+						
+						while(nova.row==p.row && nova.col==p.col){
+							pos = random(areas_possiveis.size());
+							nova = areas_possiveis.get(pos);
+						}
+						
+					}
 							
 					ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 					ambiente[nova.row][nova.col] = 'G';
@@ -1229,6 +1305,7 @@ public class Main{
 				else{
 						
 						// Encontrar a posição final segura
+					
 						Position term = new Position();
 						
 						term.row=-1;
@@ -1252,7 +1329,6 @@ public class Main{
 						}
 						
 						// Viajar até a posição final segura
-						
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[term.row][term.col] = 'G';
 						
@@ -1297,8 +1373,7 @@ public class Main{
 		
 		char ambiente[][] = new char[4][4];
 		
-		// Iniciar os ambientes: brizas, fedor e imaginacaoWumpus
-		
+		// Iniciar os ambientes: brizas, fedor, imaginacaoWumpus e imaginacaoPocos.
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
 				brizas[i][j] = '-';
@@ -1328,6 +1403,7 @@ public class Main{
 		
 		// Nestes for's um ambiente estático é criado para a aplicação
 		// ambiente background
+		// O ambiente2 é uma cópia do ambiente no estado inicial.
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
 				if(i==3 && j==0){
@@ -1346,12 +1422,15 @@ public class Main{
 		
 		while(true){
 			
+			// Aqui o movimento do agente 'Guerreiro' é realizado
 			ambiente = start(ambiente);
 			
+			// Apresentação do ambiente
 			System.out.println(" ");
 			System.out.println("--------------------");
 			showAmbiente(ambiente);
 			System.out.println("--------------------");
+			
 			//showAmbiente(brizas);
 			//showAmbiente(fedor);
 			//showAmbiente(imaginacaoWumpus);
@@ -1359,6 +1438,7 @@ public class Main{
 			
 			ent.nextLine();
 			
+			// Nesta função, verifica-se se o agente ganhou (encontrou o ouro) ou perdeu (caiu no poço ou foi morto pelo Wumpus)
 			if(verify(ambiente)){
 				break;
 			}
