@@ -1,4 +1,11 @@
 
+// Autor: Rodrigo Carlos
+// E-mail: rocaleal98@gmail.com
+// OBS: se quiser utilizar o código, entre em contato comigo pelo e-mail.
+
+// Author: Rodrigo Carlos
+// E-mail: rocaleal98@gmail.com
+// PS: if want use the code, contact me in e-mail.
 
 import java.util.ArrayList;
 import java.util.Random;
