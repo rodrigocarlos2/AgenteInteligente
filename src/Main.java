@@ -21,8 +21,12 @@ public class Main{
 	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
 	// cenário está aqui!
 	
+	static char imaginacaoPocos[][] = new char[4][4];
+	// Aqui vão ficar armazenadas as conclusões, pensamentos do Guerreiro sobre o ambiente.
+	// No entanto, somente no que diz respeito aos poços.
+	
 	static ArrayList<Position> posicoes = new ArrayList<Position>();
-	// ArrayList auxiliar para chamada durante o programa
+	// ArrayList auxiliar para chamada durante o programa.
 	
 	static ArrayList<Position> areas_visitadas = new ArrayList<Position>();
 	// Aqui são armazenadas as áreas já visitadas pelo agente
@@ -325,6 +329,34 @@ public class Main{
 		
 	}
 	
+	public static boolean is_different(ArrayList<Position> p1, ArrayList<Position> p2){
+		
+		boolean is;
+
+		is = true;
+		
+		for(int i=0; i<p1.size(); i++){
+			
+			Position temp_p1 = p1.get(i);
+			
+			is = true;
+			
+			for(int j=0; j<p2.size(); j++){
+				
+				Position temp_p2 = p2.get(i);
+				
+				if(temp_p1.row==temp_p2.row && temp_p1.col==temp_p2.col){
+					is = false;
+					break;
+				}
+			}
+			
+		}
+		
+		return is;
+		
+	}
+	
 	// Função showAmbiente: apresente a matriz do ambiente, pode ser usado para mostrar outras matrizes trabalhadas
 	public static void showAmbiente(char ambiente[][]){
 		
@@ -624,6 +656,62 @@ public class Main{
 				}
 			}
 			
+		}
+		
+		if(brizas[p.row][p.col]=='B'){
+			
+			imaginacaoPocos[p.row][p.col]='B';
+			
+			if(p.row>0 && imaginacaoPocos[p.row-1][p.col]=='0'){
+				imaginacaoPocos[p.row-1][p.col] = 'P';
+			}
+			
+			if(p.row<3 && imaginacaoPocos[p.row+1][p.col]=='0'){
+				imaginacaoPocos[p.row+1][p.col] = 'P';
+			}
+			
+			if(p.col>0 && imaginacaoPocos[p.row][p.col-1]=='0'){
+				imaginacaoPocos[p.row][p.col-1] = 'P';
+			}
+			
+			if(p.col<3 && imaginacaoPocos[p.row][p.col+1]=='0'){
+				imaginacaoPocos[p.row][p.col+1] = 'P';
+			}
+			
+		}
+		
+		if(ambiente2[p.row][p.col]=='-'){
+			imaginacaoPocos[p.row][p.col] = '-';
+		}
+		
+		if(ambiente2[p.row][p.col]=='F' && brizas[p.row][p.col]!='B'){
+			imaginacaoPocos[p.row][p.col] = '-';
+		}
+		else if(ambiente2[p.row][p.col]=='F' && brizas[p.row][p.col]=='B'){
+			imaginacaoPocos[p.row][p.col] = 'B';
+		}
+		
+		for(int i=0; i<4; i++){
+			for(int j=0; j<4; j++){
+				if(imaginacaoPocos[i][j]=='-'){
+					
+					if(j<3 && imaginacaoPocos[i][j+1]=='0'){
+						imaginacaoPocos[i][j+1] = 'N';
+					}
+					
+					if(j>0 && imaginacaoPocos[i][j-1]=='0'){
+						imaginacaoPocos[i][j-1] = 'N';
+					}
+					
+					if(i>0 && imaginacaoPocos[i-1][j]=='0'){
+						imaginacaoPocos[i-1][j] = 'N';
+					}
+					
+					if(i<3 && imaginacaoPocos[i+1][j]=='0'){
+						imaginacaoPocos[i+1][j] = 'N';
+					}	
+				}	
+			}
 		}
 		
 		if(fedor[p.row][p.col]=='F'){
@@ -1111,59 +1199,56 @@ public class Main{
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[current.row][current.col] = 'G';
 						
-						break;
+						return ambiente;
 						
 					}
-					else{
+					
+				}
+					
+				System.out.println("Rodrigo não sei para onde ir!");
+					
+				if(is_different(areas_seguras, areas_possiveis)){
+					
+					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
+							
+					int pos = random(areas_possiveis.size());
+							
+					Position nova = areas_possiveis.get(pos);
+							
+					ambiente[p.row][p.col] = ambiente2[p.row][p.col];
+					ambiente[nova.row][nova.col] = 'G';
+					
+				}
+				else{
 						
-						System.out.println("Rodrigo não sei para onde ir!");
+						// Encontrar a posição final segura
+						Position term = new Position();
 						
-						if(areas_visitadas.size()==areas_seguras.size() || areas_visitadas.size()>areas_seguras.size()){
+						term.row=-1;
+						term.col=-1;
 						
-							System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
+						for(int t=0; t<areas_seguras.size(); t++){
 							
-							int pos = random(areas_possiveis.size());
+							Position temp = new Position();
 							
-							Position nova = areas_possiveis.get(pos);
+							temp = areas_seguras.get(t);
 							
-							ambiente[p.row][p.col] = ambiente2[p.row][p.col];
-							ambiente[nova.row][nova.col] = 'G';
-						
-						}
-						else{
-							
-							// Encontrar a posição final segura
-							Position term = new Position();
-							
-							term.row=-1;
-							term.col=-1;
-							
-							for(int t=0; t<areas_seguras.size(); t++){
+							if(!compare(areas_visitadas, temp)){
 								
-								Position temp = new Position();
+								term.row = temp.row;
+								term.col = temp.col;
 								
-								temp = areas_seguras.get(t);
-								
-								if(!compare(areas_visitadas, temp)){
-									
-									term.row = temp.row;
-									term.col = temp.col;
-									
-									break;
-									
-								}
+								break;
 								
 							}
 							
-							// Viajar até a posição final segura
-							
-							ambiente[p.row][p.col] = ambiente2[p.row][p.col];
-							ambiente[term.row][term.col] = 'G';
-							
 						}
 						
-						break;	
-					}
+						// Viajar até a posição final segura
+						
+						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
+						ambiente[term.row][term.col] = 'G';
+						
 				}
 			
 			return ambiente;
@@ -1225,6 +1310,12 @@ public class Main{
 			}
 		}
 		
+		for(int i=0; i<4; i++){
+			for(int j=0; j<4; j++){
+				imaginacaoPocos[i][j] = '0';
+			}
+		}
+		
 		// Iniciando o ambiente Wumpus´s World
 		initAmbiente(ambiente);
 		
@@ -1257,6 +1348,7 @@ public class Main{
 			//showAmbiente(brizas);
 			//showAmbiente(fedor);
 			//showAmbiente(imaginacaoWumpus);
+			//showAmbiente(imaginacaoPocos);
 			
 			ent.nextLine();
 			

@@ -1,0 +1,9 @@
+
+Ambientes legais para análise da aplicação
+
+| B || - || B || P | 
+| P || B || O || P | 
+| W || F || - || B | 
+| G || - || - || - | 
+
+-----------------------------------------
