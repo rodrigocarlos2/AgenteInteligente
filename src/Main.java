@@ -16,6 +16,9 @@ public class Main{
 	
 	static boolean matou=false;
 	
+	// Medida de desempenho
+	static int status = 0;
+	
 	static char ambiente2[][] = new char[4][4];
 	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente
 	
@@ -932,13 +935,15 @@ public class Main{
 		
 		if(countWumpus==1){
 			
-			System.out.println("Rodrigo, eu sei onde está o Wumpus. Vou matá-lo!");
+			System.out.println("Eu sei onde está o Wumpus. Vou matá-lo!");
 			
 			ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 			
 			ambiente[xWumpus][yWumpus] = 'G';
 			
 			matou=true;
+			
+			status = status - 10;
 			
 			Position Wumpus = new Position();
 			Wumpus.row = xWumpus;
@@ -1169,21 +1174,40 @@ public class Main{
 			
 		}
 		
-		System.out.print("Áreas visitadas: ");
-		for(int i=0; i<areas_visitadas.size(); i++){
-			System.out.print("Position: "+areas_visitadas.get(i).row+" - "+areas_visitadas.get(i).col+" / ");
-		}
-		System.out.println(" ");
+		// Neste for removemos áreas seguras que podem estar nas áreas consideradas perigosas
 		
-		System.out.print("Áreas seguras: ");
 		for(int i=0; i<areas_seguras.size(); i++){
-			System.out.print("Position: "+areas_seguras.get(i).row+" - "+areas_seguras.get(i).col+" / ");
+			
+			Position temp = new Position();
+			
+			temp.row = areas_seguras.get(i).row;
+			temp.col = areas_seguras.get(i).col;
+				
+			for(int j=0; j<areas_perigosas.size(); j++){
+				if(areas_perigosas.get(j).row==temp.row && areas_perigosas.get(j).col==temp.col){
+					areas_perigosas.remove(j);
+				}
+			}
+			
+		}
+		
+		System.out.println("Medida de Desempenho: "+status);
+		
+		System.out.print("Áreas já visitadas: ");
+		for(int i=0; i<areas_visitadas.size(); i++){
+			System.out.print("Posição: "+areas_visitadas.get(i).row+" - "+areas_visitadas.get(i).col+" / ");
 		}
 		System.out.println(" ");
 		
-		System.out.print("Áreas perigosas: ");
+		System.out.print("Áreas consideradas seguras: ");
+		for(int i=0; i<areas_seguras.size(); i++){
+			System.out.print("Posição: "+areas_seguras.get(i).row+" - "+areas_seguras.get(i).col+" / ");
+		}
+		System.out.println(" ");
+		
+		System.out.print("Áreas consideradas perigosas: ");
 		for(int i=0; i<areas_perigosas.size(); i++){
-			System.out.print("Position: "+areas_perigosas.get(i).row+" - "+areas_perigosas.get(i).col+" / ");
+			System.out.print("Posição: "+areas_perigosas.get(i).row+" - "+areas_perigosas.get(i).col+" / ");
 		}
 		System.out.println(" ");
 		
@@ -1250,9 +1274,10 @@ public class Main{
 				System.out.print("Áreas possíveis de movimentação: ");
 				
 				for(int i=0; i<areas_possiveis.size(); i++){
-					System.out.print(" Position: "+areas_possiveis.get(i).row+" - "+areas_possiveis.get(i).col+" / ");
+					System.out.print(" Posição: "+areas_possiveis.get(i).row+" - "+areas_possiveis.get(i).col+" / ");
 				}
 				
+				System.out.println(" ");
 				System.out.println(" ");
 				
 				// Agora basta encontrar a próxima área para movimentação
@@ -1272,7 +1297,7 @@ public class Main{
 					
 				}
 					
-				System.out.println("Rodrigo não sei para onde ir!");
+				System.out.println("Neste momento não sei para onde ir!");
 				
 				// Guerreiro não sabe para onde ir
 				// Então ele escolhe uma das áreas seguras
@@ -1280,6 +1305,23 @@ public class Main{
 				if(is_different(areas_seguras, areas_possiveis)){
 					
 					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
+					
+					for(int i=0; i<areas_possiveis.size(); i++){
+						
+						Position temp = new Position();
+						
+						temp.row = areas_possiveis.get(i).row;
+						temp.col = areas_possiveis.get(i).col;
+						
+						for(int j=0; j<areas_visitadas.size(); j++){
+							
+							if(areas_visitadas.get(j).row==temp.row && areas_visitadas.get(j).col==temp.col){
+								areas_possiveis.remove(i);
+							}
+							
+						}
+						
+					}
 							
 					int pos = random(areas_possiveis.size());
 							
@@ -1305,6 +1347,8 @@ public class Main{
 				else{
 						
 						// Encontrar a posição final segura
+					
+						System.out.println("Mas existe ainda uma posição segura que conheço.");
 					
 						Position term = new Position();
 						
@@ -1354,14 +1398,17 @@ public class Main{
 		
 		if(ambiente[row][col]=='G' && ambiente2[row][col]=='W' && matou==false){
 			System.out.println("Wumpus matou o guerreiro!");
+			status = status-1000;
 			return true;
 		}
 		if(ambiente[row][col]=='G' && ambiente2[row][col]=='P'){
 			System.out.println("Guerreiro caiu no poço!");
+			status = status-1000;
 			return true;
 		}
 		if(ambiente[row][col]=='G' && ambiente2[row][col]=='O'){
 			System.out.println("Guerreiro encontrou o ouro!");
+			status = status+1000;
 			return true;
 		}
 		
@@ -1425,6 +1472,8 @@ public class Main{
 			// Aqui o movimento do agente 'Guerreiro' é realizado
 			ambiente = start(ambiente);
 			
+			status--;
+			
 			// Apresentação do ambiente
 			System.out.println(" ");
 			System.out.println("--------------------");
@@ -1440,6 +1489,9 @@ public class Main{
 			
 			// Nesta função, verifica-se se o agente ganhou (encontrou o ouro) ou perdeu (caiu no poço ou foi morto pelo Wumpus)
 			if(verify(ambiente)){
+				System.out.println(" ");
+				System.out.println("Medida de Desempenho: "+status);
+				System.out.println(" ");
 				break;
 			}
 			
