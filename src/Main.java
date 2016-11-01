@@ -340,6 +340,7 @@ public class Main{
 		
 	}
 	
+	// Se os dois arrays forem diferentes, a função retorna true
 	public static boolean is_different(ArrayList<Position> p1, ArrayList<Position> p2){
 		
 		boolean is;
@@ -354,7 +355,7 @@ public class Main{
 			
 			for(int j=0; j<p2.size(); j++){
 				
-				Position temp_p2 = p2.get(i);
+				Position temp_p2 = p2.get(j);
 				
 				if(temp_p1.row==temp_p2.row && temp_p1.col==temp_p2.col){
 					is = false;
@@ -1281,12 +1282,13 @@ public class Main{
 				System.out.println(" ");
 				
 				// Agora basta encontrar a próxima área para movimentação
-				
 				for(int i=0; i<areas_possiveis.size(); i++){
 					
 					Position current = areas_possiveis.get(i);
 					
 					if(!compare(areas_visitadas, current) && compare(areas_seguras, current) && !compare(areas_perigosas, current)){
+						
+						System.out.println("Estou me movimentando para uma área que sei que é segura.");
 						
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[current.row][current.col] = 'G';
@@ -1302,7 +1304,7 @@ public class Main{
 				// Guerreiro não sabe para onde ir
 				// Então ele escolhe uma das áreas seguras
 					
-				if(is_different(areas_seguras, areas_possiveis)){
+				if(!is_different(areas_seguras, areas_possiveis)){
 					
 					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
 					
@@ -1351,6 +1353,23 @@ public class Main{
 						System.out.println("Mas existe ainda uma posição segura que conheço.");
 					
 						Position term = new Position();
+						
+						for(int i=0; i<areas_possiveis.size(); i++){
+							
+							Position temp = new Position();
+							
+							temp.row = areas_possiveis.get(i).row;
+							temp.col = areas_possiveis.get(i).col;
+							
+							for(int j=0; j<areas_visitadas.size(); j++){
+								
+								if(areas_visitadas.get(j).row==temp.row && areas_visitadas.get(j).col==temp.col){
+									areas_possiveis.remove(i);
+								}
+								
+							}
+							
+						}
 						
 						term.row=-1;
 						term.col=-1;
