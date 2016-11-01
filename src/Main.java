@@ -1,11 +1,18 @@
 
 // Autor: Rodrigo Carlos
 // E-mail: rocaleal98@gmail.com
-// OBS: se quiser utilizar o código, entre em contato comigo pelo e-mail.
+// Autor: Ricardo Bruno
+// E-mail: ricardobrunof@gmail.com
+// OBS: se quiser utilizar o código, envie-me uma mensagem.
 
 // Author: Rodrigo Carlos
 // E-mail: rocaleal98@gmail.com
-// PS: if want use the code, contact me in e-mail.
+// Autor: Ricardo Bruno
+// E-mail: ricardobrunof@gmail.com
+// PS: if want use the code, send me a message.
+
+// Projeto desenvolvido no Eclipse Luna Mars.
+// Project developed in Eclipse Luna Mars.
 
 import java.awt.Image;
 import java.util.ArrayList;
