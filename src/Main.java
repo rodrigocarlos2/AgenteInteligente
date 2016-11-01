@@ -1308,17 +1308,18 @@ public class Main{
 					
 					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
 					
-					for(int i=0; i<areas_possiveis.size(); i++){
+					for(int i=0; i<areas_visitadas.size(); i++){
 						
 						Position temp = new Position();
 						
-						temp.row = areas_possiveis.get(i).row;
-						temp.col = areas_possiveis.get(i).col;
+						temp.row = areas_visitadas.get(i).row;
+						temp.col = areas_visitadas.get(i).col;
 						
-						for(int j=0; j<areas_visitadas.size(); j++){
+						for(int j=0; j<areas_possiveis.size(); j++){
 							
-							if(areas_visitadas.get(j).row==temp.row && areas_visitadas.get(j).col==temp.col){
-								areas_possiveis.remove(i);
+							if(areas_possiveis.get(j).row==temp.row && areas_possiveis.get(j).col==temp.col){
+								areas_possiveis.remove(j);
+								break;
 							}
 							
 						}
