@@ -36,7 +36,7 @@ public class Main{
 	static char ambiente2[][] = new char[4][4];
 	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente.
 	
-	static char brizas[][] = new char[4][4];
+	static char brisas[][] = new char[4][4];
 	// Esta matriz fica responsável por armazenar as brisas.
 	
 	static char fedor[][] = new char[4][4];
@@ -76,7 +76,7 @@ public class Main{
 		
 	}
 	
-	// Função initAmbiente: inicia o ambiente, colocando o Wumpus, Agente, Brizas, Fedor e Poços nos seus lugares.
+	// Função initAmbiente: inicia o ambiente, colocando o Wumpus, Agente, brisas, Fedor e Poços nos seus lugares.
 	// O ambiente é gerado randomicamente, conforme pedido feito na descrição do trabalho na disciplina.
 	public static void initAmbiente(char ambiente[][]){
 		
@@ -209,7 +209,7 @@ public class Main{
 			
 		}
 		
-		// Condicionais para montar as brizas
+		// Condicionais para montar as brisas
 		
 		for(int i=0; i<4; i++){
 			
@@ -231,48 +231,48 @@ public class Main{
 					if(colPoco>0){
 
 						if(ambiente[rowPoco][colPoco-1]!='P')
-							brizas[rowPoco][colPoco-1] = 'B';
-						// Brizas inserido no cenário
+							brisas[rowPoco][colPoco-1] = 'B';
+						// brisas inserido no cenário
 						
 						if(ambiente[rowPoco][colPoco-1]=='-'){
 							ambiente[rowPoco][colPoco-1] = 'B';
-							// Brizas inserido no cenário
+							// brisas inserido no cenário
 						}
 						
 					}
 					if(colPoco<3){
 
 						if(ambiente[rowPoco][colPoco+1]!='P')
-							brizas[rowPoco][colPoco+1] = 'B';
-						// Brizas inserido no cenário
+							brisas[rowPoco][colPoco+1] = 'B';
+						// brisas inserido no cenário
 						
 						if(ambiente[rowPoco][colPoco+1]=='-'){
 							ambiente[rowPoco][colPoco+1] = 'B';
-							// Brizas inserido no cenário
+							// brisas inserido no cenário
 						}
 						
 					}
 					if(rowPoco>0){
 
 						if(ambiente[rowPoco-1][colPoco]!='P')
-							brizas[rowPoco-1][colPoco] = 'B';
-						// Brizas inserido no cenário
+							brisas[rowPoco-1][colPoco] = 'B';
+						// brisas inserido no cenário
 						
 						if(ambiente[rowPoco-1][colPoco]=='-'){
 							ambiente[rowPoco-1][colPoco] = 'B';
-							// Brizas inserido no cenário
+							// brisas inserido no cenário
 						}
 						
 					}
 					if(rowPoco<3){
 						
 						if(ambiente[rowPoco+1][colPoco]!='P')
-							brizas[rowPoco+1][colPoco] = 'B';
-						// Brizas inserido no cenário
+							brisas[rowPoco+1][colPoco] = 'B';
+						// brisas inserido no cenário
 						
 						if(ambiente[rowPoco+1][colPoco]=='-'){
 							ambiente[rowPoco+1][colPoco] = 'B';
-							// Brizas inserido no cenário
+							// brisas inserido no cenário
 						}
 						
 					}
@@ -439,7 +439,7 @@ public class Main{
 		p.row=r;
 		p.col=c;
 		
-		if(brizas[p.row][p.col]=='B'){
+		if(brisas[p.row][p.col]=='B'){
 			// Se na posição do agente existe uma brisa, essa condição é aceita.
 			
 			if(!compare(areas_seguras, p)){
@@ -505,13 +505,13 @@ public class Main{
 			}
 		}
 		
-		if(brizas[p.row][p.col]=='F'){
+		if(brisas[p.row][p.col]=='F'){
 			if(!compare(areas_seguras, p)){
 				areas_seguras.add(p);
 			}
 		}
 		
-		if(brizas[p.row][p.col]!='B' && ambiente[p.row][p.col]!='F' && brizas[p.row][p.col]=='-'){
+		if(brisas[p.row][p.col]!='B' && ambiente[p.row][p.col]!='F' && brisas[p.row][p.col]=='-'){
 			
 			// Na aceitação dessa condição, tem-se que a posição atual do agente tem '-', que é
 			// um símbolo que representa nenhum perigo, mas sim área segura.
@@ -572,7 +572,7 @@ public class Main{
 		}
 		else{
 			
-			if(brizas[p.row][p.col]=='B'){
+			if(brisas[p.row][p.col]=='B'){
 				// Inserir áreas perigosas
 				
 				if(p.col>0){
@@ -697,7 +697,7 @@ public class Main{
 			
 		}
 		
-		if(brizas[p.row][p.col]=='B'){
+		if(brisas[p.row][p.col]=='B'){
 			// Dentro desse condicional, é criada a imaginação dos poços.
 			
 			imaginacaoPocos[p.row][p.col]='B';
@@ -726,10 +726,10 @@ public class Main{
 			imaginacaoPocos[p.row][p.col] = '-';
 		}
 		
-		if(ambiente2[p.row][p.col]=='F' && brizas[p.row][p.col]!='B'){
+		if(ambiente2[p.row][p.col]=='F' && brisas[p.row][p.col]!='B'){
 			imaginacaoPocos[p.row][p.col] = '-';
 		}
-		else if(ambiente2[p.row][p.col]=='F' && brizas[p.row][p.col]=='B'){
+		else if(ambiente2[p.row][p.col]=='F' && brisas[p.row][p.col]=='B'){
 			imaginacaoPocos[p.row][p.col] = 'B';
 		}
 		
@@ -1008,7 +1008,7 @@ public class Main{
 			
 			// A posição do Wumpus morto ganha o símbolo '-', assim como as posições adjacentes.
 			
-			if(brizas[xWumpus][yWumpus]=='B'){
+			if(brisas[xWumpus][yWumpus]=='B'){
 				ambiente2[xWumpus][yWumpus] = 'B';
 			}
 			else
@@ -1029,7 +1029,7 @@ public class Main{
 						
 						areas_seguras.add(novo);
 						
-						if(brizas[i][j]=='B'){
+						if(brisas[i][j]=='B'){
 							ambiente[i][j] = 'B';
 							ambiente2[i][j] = 'B';
 						}
@@ -1141,7 +1141,7 @@ public class Main{
 			
 		}
 		
-		if(brizas[p.row][p.col]=='B'){
+		if(brisas[p.row][p.col]=='B'){
 			
 			if(p.row>0){
 				
@@ -1532,10 +1532,10 @@ public class Main{
 		
 		char ambiente[][] = new char[4][4];
 		
-		// Iniciar os ambientes: brizas, fedor, imaginacaoWumpus e imaginacaoPocos.
+		// Iniciar os ambientes: brisas, fedor, imaginacaoWumpus e imaginacaoPocos.
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
-				brizas[i][j] = '-';
+				brisas[i][j] = '-';
 			}
 		}
 		
@@ -1592,7 +1592,7 @@ public class Main{
 			showAmbiente(ambiente);
 			System.out.println("--------------------");
 			
-			//showAmbiente(brizas);
+			//showAmbiente(brisas);
 			//showAmbiente(fedor);
 			//showAmbiente(imaginacaoWumpus);
 			//showAmbiente(imaginacaoPocos);
