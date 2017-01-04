@@ -20,10 +20,10 @@ import java.util.Scanner;
 
 public class Main{
 	
-	static boolean matou=false;
+	static boolean grito=false;
 	// Variável responsável por armazenar a morte ou vida do Wumpus.
-	// matou = false -> Wumpus vivo.
-	// matou = true -> Wumpus morto.
+	// grito = false -> Wumpus vivo.
+	// grito = true -> Wumpus morto.
 	
 	// Medida de desempenho
 	static int status = 0;
@@ -1169,7 +1169,7 @@ public class Main{
 			ambiente[xWumpus][yWumpus] = 'G';
 			// Guerreiro fica onde o Wumpus estava anteriormente.
 			
-			matou=true;
+			grito=true;
 			
 			Position Wumpus = new Position();
 			Wumpus.row = xWumpus;
@@ -1554,7 +1554,7 @@ public class Main{
 					// não se tem mais uma área considerada segura que não foi visitada,
 					// então só resta o agente escolher ao acaso, uma nova posição.
 					
-					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
+					System.out.println("Vou escolher ao acaso. Então me deseje sorte.");
 					
 					for(int i=0; i<areas_visitadas.size(); i++){
 						
@@ -1676,8 +1676,8 @@ public class Main{
 			}
 		}
 		
-		if(ambiente[row][col]=='G' && ambiente2[row][col]=='W' && matou==false){
-			System.out.println("Wumpus matou o guerreiro!");
+		if(ambiente[row][col]=='G' && ambiente2[row][col]=='W' && grito==false){
+			System.out.println("Wumpus grito o guerreiro!");
 			status = status-1000;
 			return true;
 		}
@@ -1692,7 +1692,7 @@ public class Main{
 			return true;
 		}
 		
-		if(matou){
+		if(grito){
 			status = status - 10;
 		}
 		
