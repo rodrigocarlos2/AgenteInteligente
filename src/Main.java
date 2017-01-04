@@ -1163,6 +1163,8 @@ public class Main{
 			
 			System.out.println("Eu sei onde está o Wumpus. Vou matá-lo!");
 			
+			System.out.println("Grito do Wumpus.");
+			
 			ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 			
 			ambiente[xWumpus][yWumpus] = 'G';
