@@ -1723,7 +1723,7 @@ public class Main{
 		}
 		
 		if(grito){
-			status = status - 10;
+			status=status-10;
 		}
 		
 		return false;
@@ -1811,8 +1811,8 @@ public class Main{
 				
 			}
 			
-			int valor1;
-			int valor2;
+			int valor1 = 0;
+			int valor2 = 0;
 			
 			if(yInicial>yFinal)
 				valor1 = yFinal-yInicial;
@@ -1824,6 +1824,9 @@ public class Main{
 				valor2 = xInicial-xFinal;
 			
 			int valorComp = valor2+valor1;
+			
+			System.out.println("Status:"+status);
+			System.out.println("Valor:"+valorComp);
 			
 			status=status+valorComp;
 			
