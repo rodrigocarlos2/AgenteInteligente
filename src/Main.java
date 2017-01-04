@@ -285,6 +285,64 @@ public class Main{
 			
 		}
 		
+		for(int i=0; i<4; i++){
+			
+			boolean existe = false;
+			
+			int rowOuro=0;
+			int colOuro=0;
+			
+			for(int j=0; j<4; j++){
+				
+				if(ambiente[i][j]=='O'){
+					rowOuro = i;
+					colOuro = j;
+					existe = true;
+				}
+				
+				if(existe){
+					
+					if(colOuro>0){
+						
+						if(ambiente[rowOuro][colOuro-1]=='-'){
+							ambiente[rowOuro][colOuro-1] = 'R';
+							// brilho inserido no cenário
+						}
+						
+					}
+					if(colOuro<3){
+
+						if(ambiente[rowOuro][colOuro+1]=='-'){
+							ambiente[rowOuro][colOuro+1] = 'R';
+							// brilho inserido no cenário
+						}
+						
+					}
+					if(rowOuro>0){
+
+						if(ambiente[rowOuro-1][colOuro]=='-'){
+							ambiente[rowOuro-1][colOuro] = 'R';
+							// brilho inserido no cenário
+						}
+						
+					}
+					if(rowOuro<3){
+						
+						if(ambiente[rowOuro+1][colOuro]=='-'){
+							ambiente[rowOuro+1][colOuro] = 'R';
+							// brilho inserido no cenário
+						}
+						
+					}
+					
+					existe = false;
+					
+				}
+				
+			}
+			
+		}
+		
 		// Condicionais para montar os locais com fedor
 		
 		for(int i=0; i<4; i++){
