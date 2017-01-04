@@ -386,8 +386,8 @@ public class Main{
 		
 	}
 	
-	// Função showAmbiente: apresente a matriz passada por parâmetro.
-	public static void showAmbiente(char ambiente[][]){
+	// Função show: apresente a matriz passada por parâmetro.
+	public static void show(char ambiente[][]){
 		
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
@@ -1491,6 +1491,7 @@ public class Main{
 	
 	// Esta função fica responsável por atualizar o status (medida de 
 	// desempenho) do jogo.
+	// Além de verificar se o guerreiro encontrou o ouro (teste de objetivo).
 
 	public static boolean verify(char ambiente[][]){
 		
@@ -1576,7 +1577,7 @@ public class Main{
 			}
 		}
 		
-		showAmbiente(ambiente);
+		show(ambiente);
 		// Ambiente completamente montado.
 		
 		System.out.println(" ");
@@ -1591,13 +1592,13 @@ public class Main{
 			// Apresentação do ambiente
 			System.out.println(" ");
 			System.out.println("--------------------");
-			showAmbiente(ambiente);
+			show(ambiente);
 			System.out.println("--------------------");
 			
-			//showAmbiente(brisas);
-			//showAmbiente(fedor);
-			//showAmbiente(imaginacaoWumpus);
-			//showAmbiente(imaginacaoPocos);
+			//show(brisas);
+			//show(fedor);
+			//show(imaginacaoWumpus);
+			//show(imaginacaoPocos);
 			
 			ent.nextLine();
 			
