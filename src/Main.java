@@ -1778,10 +1778,10 @@ public class Main{
 			
 			//show(brisas);
 			//show(fedor);
+			//show(brilho);
 			//show(imaginacaoWumpus);
 			//show(imaginacaoPocos);
 			//show(imaginacaoOuro);
-			//show(brilho);
 			
 			ent.nextLine();
 			
