@@ -1009,7 +1009,6 @@ public class Main{
 			// A posição do Wumpus morto ganha o símbolo '-', assim como as posições adjacentes.
 			
 			if(brizas[xWumpus][yWumpus]=='B'){
-				ambiente[xWumpus][yWumpus] = 'B';
 				ambiente2[xWumpus][yWumpus] = 'B';
 			}
 			else
