@@ -1155,8 +1155,7 @@ public class Main{
 			
 			ambiente[xOuro][yOuro] = 'G';
 			
-			return ambiente;
-			
+			return ambiente;	
 		}
 		
 		if(countWumpus==1){
