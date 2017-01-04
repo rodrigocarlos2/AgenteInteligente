@@ -1008,7 +1008,12 @@ public class Main{
 			
 			// A posição do Wumpus morto ganha o símbolo '-', assim como as posições adjacentes.
 			
-			ambiente2[xWumpus][yWumpus] = '-';
+			if(brizas[xWumpus][yWumpus]=='B'){
+				ambiente[xWumpus][yWumpus] = 'B';
+				ambiente2[xWumpus][yWumpus] = 'B';
+			}
+			else
+				ambiente2[xWumpus][yWumpus] = '-';
 			
 			for(int i=0; i<4; i++){
 				
@@ -1025,8 +1030,14 @@ public class Main{
 						
 						areas_seguras.add(novo);
 						
-						ambiente[i][j] = '-';
-						ambiente2[i][j] = '-';
+						if(brizas[i][j]=='B'){
+							ambiente[i][j] = 'B';
+							ambiente2[i][j] = 'B';
+						}
+						else{
+							ambiente[i][j] = '-';
+							ambiente2[i][j] = '-';
+						}
 						
 					}
 					
