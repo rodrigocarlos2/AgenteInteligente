@@ -919,7 +919,7 @@ public class Main{
 				imaginacaoOuro[p.row][p.col-1] = 'W';
 			}
 			
-			if(p.col<3 && imaginacaoWumpus[p.row][p.col+1]=='0'){
+			if(p.col<3 && imaginacaoOuro[p.row][p.col+1]=='0'){
 				imaginacaoOuro[p.row][p.col+1] = 'W';
 			}
 			
@@ -1768,6 +1768,7 @@ public class Main{
 			ambiente = start(ambiente);
 							
 			if(ambiente[3][0]!='G'){
+				
 				if(fedor[3][0]=='F'){
 					ambiente[3][0]  = 'F';
 				}
@@ -1777,6 +1778,7 @@ public class Main{
 				else if(brilho[3][0]=='R'){
 					ambiente[3][0] = 'R';
 				}
+				
 			}
 			
 			status--;
