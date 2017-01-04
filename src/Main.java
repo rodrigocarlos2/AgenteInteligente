@@ -1542,7 +1542,6 @@ public class Main{
 						// Neste momento, esta função termina.
 						
 					}
-					
 				}
 					
 				System.out.println("Neste momento não sei para onde ir!");
