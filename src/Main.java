@@ -1192,6 +1192,9 @@ public class Main{
 			if(brisas[xWumpus][yWumpus]=='B'){
 				ambiente2[xWumpus][yWumpus] = 'B';
 			}
+			else if(brilho[xWumpus][yWumpus]=='R'){
+				ambiente2[xWumpus][yWumpus] = 'R';
+			}
 			else
 				ambiente2[xWumpus][yWumpus] = '-';
 			
@@ -1213,6 +1216,10 @@ public class Main{
 						if(brisas[i][j]=='B'){
 							ambiente[i][j] = 'B';
 							ambiente2[i][j] = 'B';
+						}
+						else if(brilho[i][j]=='R'){
+							ambiente[i][j] = 'R';
+							ambiente2[i][j] = 'R';
 						}
 						else{
 							ambiente[i][j] = '-';
