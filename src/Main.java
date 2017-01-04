@@ -42,9 +42,16 @@ public class Main{
 	static char fedor[][] = new char[4][4];
 	// Esta matriz fica responsável por armazenar os fedores.
 	
+	static char brilho[][] = new char[4][4];
+	// Esta matriz fica responsável por armazenar os brilhos.
+	
 	static char imaginacaoWumpus[][] = new char[4][4];
 	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
 	// cenário sobre a localização do Wumpus está aqui!
+	
+	static char imaginacaoOuro[][] = new char[4][4];
+	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
+	// cenário sobre a localização do Ouro está aqui!
 	
 	static char imaginacaoPocos[][] = new char[4][4];
 	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
@@ -304,6 +311,8 @@ public class Main{
 					
 					if(colOuro>0){
 						
+						brilho[rowOuro][colOuro-1] = 'R';
+						
 						if(ambiente[rowOuro][colOuro-1]=='-'){
 							ambiente[rowOuro][colOuro-1] = 'R';
 							// brilho inserido no cenário
@@ -312,6 +321,8 @@ public class Main{
 					}
 					if(colOuro<3){
 
+						brilho[rowOuro][colOuro+1] = 'R';
+						
 						if(ambiente[rowOuro][colOuro+1]=='-'){
 							ambiente[rowOuro][colOuro+1] = 'R';
 							// brilho inserido no cenário
@@ -320,6 +331,8 @@ public class Main{
 					}
 					if(rowOuro>0){
 
+						brilho[rowOuro-1][colOuro] = 'R';
+						
 						if(ambiente[rowOuro-1][colOuro]=='-'){
 							ambiente[rowOuro-1][colOuro] = 'R';
 							// brilho inserido no cenário
@@ -327,6 +340,8 @@ public class Main{
 						
 					}
 					if(rowOuro<3){
+						
+						brilho[rowOuro+1][colOuro] = 'R';
 						
 						if(ambiente[rowOuro+1][colOuro]=='-'){
 							ambiente[rowOuro+1][colOuro] = 'R';
@@ -886,9 +901,77 @@ public class Main{
 			}
 		}
 		
-		if(ambiente2[p.row][p.col]=='F'){
+if(fedor[p.row][p.col]=='F'){
 			
-			// Se for encontrado um fedor, então se pode encontrar e indicar áreas perigosas
+			// Neste condicional é montada a imaginação do agente sobre o Wumpus
+			
+			imaginacaoWumpus[p.row][p.col]='F';
+			
+			if(p.row>0 && imaginacaoWumpus[p.row-1][p.col]=='0'){
+				imaginacaoWumpus[p.row-1][p.col] = 'W';
+			}
+			
+			if(p.row<3 && imaginacaoWumpus[p.row+1][p.col]=='0'){
+				imaginacaoWumpus[p.row+1][p.col] = 'W';
+			}
+			
+			if(p.col>0 && imaginacaoWumpus[p.row][p.col-1]=='0'){
+				imaginacaoWumpus[p.row][p.col-1] = 'W';
+			}
+			
+			if(p.col<3 && imaginacaoWumpus[p.row][p.col+1]=='0'){
+				imaginacaoWumpus[p.row][p.col+1] = 'W';
+			}
+			
+		}
+		
+		// Estrutura de condicional composta voltada para construir a imaginação do agente sobre
+		// a localização do Ouro.
+		if(ambiente2[p.row][p.col]=='-'){
+			imaginacaoOuro[p.row][p.col] = '-';
+		}
+		
+		if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]!='F'){
+			imaginacaoOuro[p.row][p.col] = '-';
+		}
+		else if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]=='F'){
+			imaginacaoOuro[p.row][p.col] = '-';
+		}
+		else if(ambiente2[p.row][p.col]!='B' && fedor[p.row][p.col]=='F'){
+			imaginacaoOuro[p.row][p.col] = '-';
+		}
+		
+		for(int i=0; i<4; i++){
+			for(int j=0; j<4; j++){
+				if(imaginacaoOuro[i][j]=='-'){
+					
+					if(j<3 && imaginacaoOuro[i][j+1]=='0'){
+						// O caractere '0' representa posição em dúvida.
+						imaginacaoOuro[i][j+1] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
+					}
+					
+					if(j>0 && imaginacaoOuro[i][j-1]=='0'){
+						imaginacaoOuro[i][j-1] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
+					}
+					
+					if(i>0 && imaginacaoOuro[i-1][j]=='0'){
+						imaginacaoOuro[i-1][j] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
+					}
+					
+					if(i<3 && imaginacaoOuro[i+1][j]=='0'){
+						imaginacaoOuro[i+1][j] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
+					}	
+				}	
+			}
+		}
+		
+		if(ambiente2[p.row][p.col]=='R'){
+			
+			// Se for encontrado um brilho, então se pode encontrar e indicar áreas seguras
 			// conforme a posição atual do agente.
 			
 			if(p.row>0){
@@ -898,8 +981,8 @@ public class Main{
 				tal.row=p.row-1;
 				tal.col=p.col;
 				
-				if(!compare(areas_perigosas, tal)){
-					areas_perigosas.add(tal);
+				if(!compare(areas_seguras, tal)){
+					areas_seguras.add(tal);
 				}
 				
 			}
@@ -910,8 +993,8 @@ public class Main{
 				tal.row=p.row+1;
 				tal.col=p.col;
 				
-				if(!compare(areas_perigosas, tal)){
-					areas_perigosas.add(tal);
+				if(!compare(areas_seguras, tal)){
+					areas_seguras.add(tal);
 				}
 				
 			}
@@ -922,8 +1005,8 @@ public class Main{
 				tal.row=p.row;
 				tal.col=p.col-1;
 				
-				if(!compare(areas_perigosas, tal)){
-					areas_perigosas.add(tal);
+				if(!compare(areas_seguras, tal)){
+					areas_seguras.add(tal);
 				}
 	
 			}
@@ -935,8 +1018,8 @@ public class Main{
 				tal.row=p.row;
 				tal.col=p.col+1;
 				
-				if(!compare(areas_perigosas, tal)){
-					areas_perigosas.add(tal);
+				if(!compare(areas_seguras, tal)){
+					areas_seguras.add(tal);
 				}
 				
 			}
@@ -1602,6 +1685,12 @@ public class Main{
 		
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
+				brilho[i][j] = '-';
+			}
+		}
+		
+		for(int i=0; i<4; i++){
+			for(int j=0; j<4; j++){
 				fedor[i][j] = '-';
 			}
 		}
@@ -1609,6 +1698,12 @@ public class Main{
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
 				imaginacaoWumpus[i][j] = '0';
+			}
+		}
+		
+		for(int i=0; i<4; i++){
+			for(int j=0; j<4; j++){
+				imaginacaoOuro[i][j] = '0';
 			}
 		}
 		
@@ -1657,6 +1752,8 @@ public class Main{
 			//show(fedor);
 			//show(imaginacaoWumpus);
 			//show(imaginacaoPocos);
+			//show(imaginacaoOuro);
+			show(brilho);
 			
 			ent.nextLine();
 			
