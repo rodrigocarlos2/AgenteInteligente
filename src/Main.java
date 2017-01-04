@@ -1,14 +1,10 @@
 
 // Autor: Rodrigo Carlos
 // E-mail: rocaleal98@gmail.com
-// Autor: Ricardo Bruno
-// E-mail: ricardobrunof@gmail.com
 // OBS: se quiser utilizar o código, envie-me uma mensagem.
 
 // Author: Rodrigo Carlos
 // E-mail: rocaleal98@gmail.com
-// Autor: Ricardo Bruno
-// E-mail: ricardobrunof@gmail.com
 // PS: if want use the code, send me a message.
 
 // Projeto desenvolvido no Eclipse Luna Mars.
