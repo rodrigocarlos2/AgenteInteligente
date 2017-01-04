@@ -901,26 +901,26 @@ public class Main{
 			}
 		}
 		
-if(fedor[p.row][p.col]=='F'){
+		if(brilho[p.row][p.col]=='R'){
 			
-			// Neste condicional é montada a imaginação do agente sobre o Wumpus
+			// Neste condicional é montada a imaginação do agente sobre o Ouro
 			
-			imaginacaoWumpus[p.row][p.col]='F';
+			imaginacaoOuro[p.row][p.col]='R';
 			
-			if(p.row>0 && imaginacaoWumpus[p.row-1][p.col]=='0'){
-				imaginacaoWumpus[p.row-1][p.col] = 'W';
+			if(p.row>0 && imaginacaoOuro[p.row-1][p.col]=='0'){
+				imaginacaoOuro[p.row-1][p.col] = 'W';
 			}
 			
-			if(p.row<3 && imaginacaoWumpus[p.row+1][p.col]=='0'){
-				imaginacaoWumpus[p.row+1][p.col] = 'W';
+			if(p.row<3 && imaginacaoOuro[p.row+1][p.col]=='0'){
+				imaginacaoOuro[p.row+1][p.col] = 'W';
 			}
 			
-			if(p.col>0 && imaginacaoWumpus[p.row][p.col-1]=='0'){
-				imaginacaoWumpus[p.row][p.col-1] = 'W';
+			if(p.col>0 && imaginacaoOuro[p.row][p.col-1]=='0'){
+				imaginacaoOuro[p.row][p.col-1] = 'W';
 			}
 			
 			if(p.col<3 && imaginacaoWumpus[p.row][p.col+1]=='0'){
-				imaginacaoWumpus[p.row][p.col+1] = 'W';
+				imaginacaoOuro[p.row][p.col+1] = 'W';
 			}
 			
 		}
@@ -931,13 +931,10 @@ if(fedor[p.row][p.col]=='F'){
 			imaginacaoOuro[p.row][p.col] = '-';
 		}
 		
-		if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]!='F'){
+		if(ambiente2[p.row][p.col]=='B' && brilho[p.row][p.col]!='R'){
 			imaginacaoOuro[p.row][p.col] = '-';
 		}
-		else if(ambiente2[p.row][p.col]=='B' && fedor[p.row][p.col]=='F'){
-			imaginacaoOuro[p.row][p.col] = '-';
-		}
-		else if(ambiente2[p.row][p.col]!='B' && fedor[p.row][p.col]=='F'){
+		else if(ambiente2[p.row][p.col]=='F' && brilho[p.row][p.col]!='R'){
 			imaginacaoOuro[p.row][p.col] = '-';
 		}
 		
@@ -1115,6 +1112,11 @@ if(fedor[p.row][p.col]=='F'){
 			
 		}
 		
+		int count_ouro = 0;
+		
+		int xOuro = -1;
+		int yOuro = -1;
+		
 		for(int i=0; i<4; i++){
 			
 			for(int j=0; j<4; j++){
@@ -1127,6 +1129,33 @@ if(fedor[p.row][p.col]=='F'){
 				}
 				
 			}
+			
+		}
+		
+		for(int i=0; i<4; i++){
+			
+			for(int j=0; j<4; j++){
+				
+				if(imaginacaoOuro[i][j]=='W'){
+					count_ouro++;
+					xOuro =  i;
+					yOuro = j;
+					// Pega a posição do Wumpus
+				}
+				
+			}
+			
+		}
+		
+		if(count_ouro==1){
+			
+			System.out.println("Eu sei onde está o Ouro. Vou pegá-lo!");
+			
+			ambiente[p.row][p.col] = ambiente2[p.row][p.col];
+			
+			ambiente[xOuro][yOuro] = 'G';
+			
+			return ambiente;
 			
 		}
 		
@@ -1753,7 +1782,7 @@ if(fedor[p.row][p.col]=='F'){
 			//show(imaginacaoWumpus);
 			//show(imaginacaoPocos);
 			//show(imaginacaoOuro);
-			show(brilho);
+			//show(brilho);
 			
 			ent.nextLine();
 			
