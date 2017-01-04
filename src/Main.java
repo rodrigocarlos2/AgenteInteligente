@@ -1285,7 +1285,6 @@ public class Main{
 							break;
 						}
 					}
-					
 				}
 				
 			}
