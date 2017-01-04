@@ -1825,8 +1825,8 @@ public class Main{
 			
 			int valorComp = valor2+valor1;
 			
-			System.out.println("Status:"+status);
-			System.out.println("Valor:"+valorComp);
+			//System.out.println("Status:"+status);
+			//System.out.println("Valor:"+valorComp);
 			
 			status=status+valorComp;
 			
