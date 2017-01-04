@@ -33,6 +33,11 @@ public class Main{
 	// -1000: morte do agente caindo no poço, ou encontrando o Wumpus.
 	// -10: uso da flecha do agente para derrotar o Wumpus.
 	
+	static int xInicial = -1;
+	static int yInicial = -1;
+	static int xFinal = -1;
+	static int yFinal = -1;
+	
 	static char ambiente2[][] = new char[4][4];
 	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente.
 	
@@ -1155,6 +1160,11 @@ public class Main{
 			
 			ambiente[xOuro][yOuro] = 'G';
 			
+			xInicial = p.row;
+			yInicial = p.col;
+			xFinal = xOuro;
+			yFinal = yOuro;
+			
 			return ambiente;	
 		}
 		
@@ -1225,6 +1235,11 @@ public class Main{
 				}
 				
 			}
+			
+			xInicial = p.row;
+			yInicial = p.col;
+			xFinal = xWumpus;
+			yFinal = yWumpus;
 			
 			return ambiente;
 			
@@ -1537,6 +1552,11 @@ public class Main{
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[current.row][current.col] = 'G';
 						
+						xInicial = p.row;
+						yInicial = p.col;
+						xFinal = current.row;
+						yFinal = current.col;
+						
 						return ambiente;
 						// Neste momento, esta função termina.
 						
@@ -1601,6 +1621,11 @@ public class Main{
 					ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 					ambiente[nova.row][nova.col] = 'G';
 					
+					xInicial = p.row;
+					yInicial = p.col;
+					xFinal = nova.row;
+					yFinal = nova.col;
+					
 				}
 				else{
 						
@@ -1651,6 +1676,11 @@ public class Main{
 						// Viajar até a posição final segura
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[term.row][term.col] = 'G';
+						
+						xInicial = p.row;
+						yInicial = p.col;
+						xFinal = term.row;
+						yFinal = term.col;
 						
 				}
 			
@@ -1781,7 +1811,21 @@ public class Main{
 				
 			}
 			
-			status--;
+			int valor1;
+			int valor2;
+			
+			if(yInicial>yFinal)
+				valor1 = yFinal-yInicial;
+			else
+				valor1 = yInicial-yFinal;
+			if(xInicial>xFinal)
+				valor2 = xFinal-xInicial;
+			else
+				valor2 = xInicial-xFinal;
+			
+			int valorComp = valor2+valor1;
+			
+			status=status+valorComp;
 			
 			// Apresentação do ambiente
 			System.out.println(" ");
