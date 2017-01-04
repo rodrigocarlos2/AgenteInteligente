@@ -1489,7 +1489,9 @@ public class Main{
 		
 	}
 	
-	// Esta função fica responsável por atualizar o status do jogo.
+	// Esta função fica responsável por atualizar o status (medida de 
+	// desempenho) do jogo.
+
 	public static boolean verify(char ambiente[][]){
 		
 		int row=-1, col=-1;
