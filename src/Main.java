@@ -14,6 +14,9 @@
 // Projeto desenvolvido no Eclipse Luna Mars.
 // Project developed in Eclipse Luna Mars.
 
+// Um algoritmo é uma sequência de passos finitos e bem definidos que visam solucionar
+// um problema.
+
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,47 +25,54 @@ import java.util.Scanner;
 public class Main{
 	
 	static boolean matou=false;
+	// Variável responsável por armazenar a morte ou vida do Wumpus.
+	// matou = false -> Wumpus vivo.
+	// matou = true -> Wumpus morto.
 	
 	// Medida de desempenho
 	static int status = 0;
 	
+	// -1 : movimento do agente
+	// +1000: encontrou ouro
+	// -1000: morte do agente caindo no poço, ou encontrando o Wumpus.
+	// -10: uso da flecha do agente para derrotar o Wumpus.
+	
 	static char ambiente2[][] = new char[4][4];
-	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente
+	// Ambiente2 guarda o ambiente inicial/ Aquele sem ocorrer nenhuma movimentação do Agente.
 	
 	static char brizas[][] = new char[4][4];
-	// Esta matriz fica responsável por armazenar as brisas
+	// Esta matriz fica responsável por armazenar as brisas.
 	
 	static char fedor[][] = new char[4][4];
-	// Esta matriz fica responsável por armazenar as brisas
+	// Esta matriz fica responsável por armazenar os fedores.
 	
 	static char imaginacaoWumpus[][] = new char[4][4];
 	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
-	// cenário está aqui!
+	// cenário sobre a localização do Wumpus está aqui!
 	
 	static char imaginacaoPocos[][] = new char[4][4];
-	// Aqui vão ficar armazenadas as conclusões, pensamentos do Guerreiro sobre o ambiente.
-	// No entanto, somente no que diz respeito aos poços.
+	// Aqui é uma matriz que mostra a imaginação do Agente, o que o Agente tem de interpretação do
+	// cenário sobre a localização dos poços está aqui!
 	
 	static ArrayList<Position> posicoes = new ArrayList<Position>();
 	// ArrayList auxiliar para chamada durante o programa.
 	
 	static ArrayList<Position> areas_visitadas = new ArrayList<Position>();
-	// Aqui são armazenadas as áreas já visitadas pelo agente
-	// Vale lembrar que armazena áreas anteriores.
+	// Aqui são armazenadas as áreas já visitadas pelo agente.
 	
 	static ArrayList<Position> areas_perigosas = new ArrayList<Position>();
-	// Aqui são armazenadas áreas perigosas descobertas pelo agente
-	// Vale lembrar que armazena áreas anteriores.
+	// Aqui são armazenadas áreas perigosas descobertas pelo agente.
 	
 	static ArrayList<Position> areas_seguras = new ArrayList<Position>();
 	// Aqui ficam as áreas consideradas seguras para o agente.
-	// Vale lembrar que armazena áreas anteriores.
 	
 	static ArrayList<Position> areas_possiveis = new ArrayList<Position>();
-	// Neste array ficam as possíveis jogadas dos usuários.
+	// Neste array ficam as possíveis jogadas ou movimentos do agente.
 	
 	static Scanner ent = new Scanner(System.in);
 	
+	// Função para retornar um número randômico (aleatório).
+	// Usada para retornar a posição de poços, e do Wumpus que devem variar aleatoriamente.
 	public static int random(int max){
 		
 		Random r =  new Random();
@@ -71,6 +81,7 @@ public class Main{
 	}
 	
 	// Função initAmbiente: inicia o ambiente, colocando o Wumpus, Agente, Brizas, Fedor e Poços nos seus lugares.
+	// O ambiente é gerado randomicamente, conforme pedido feito na descrição do trabalho na disciplina.
 	public static void initAmbiente(char ambiente[][]){
 		
 		for(int i=0; i<4; i++){
@@ -168,6 +179,7 @@ public class Main{
 		}
 		
 		// Condicionais para montar fedor
+		
 		if(colWumpus>0){
 			
 			if(ambiente[rowWumpus][colWumpus-1]=='-'){
@@ -346,8 +358,10 @@ public class Main{
 		}
 		
 	}
+	// Fim da função initAmbiente
 	
-	// Se os dois arrays forem diferentes, a função retorna true
+	// Se os dois arrays passados por parâmetro forem diferentes, a função retorna true.
+	// Senão retorna false.
 	public static boolean is_different(ArrayList<Position> p1, ArrayList<Position> p2){
 		
 		boolean is;
@@ -376,7 +390,7 @@ public class Main{
 		
 	}
 	
-	// Função showAmbiente: apresente a matriz do ambiente, pode ser usado para mostrar outras matrizes trabalhadas
+	// Função showAmbiente: apresente a matriz passada por parâmetro.
 	public static void showAmbiente(char ambiente[][]){
 		
 		for(int i=0; i<4; i++){
@@ -389,7 +403,8 @@ public class Main{
 	}
 	
 	// Função compare: compara um objeto Position com os pertecentes de um ArrayList
-	// retorna true se encontrar, false caso contrário
+	// retorna true se encontrar, false caso contrário.
+	// Usado para saber por exemplo se a posição (3, 0) pertence ao ArrayList areas_seguras.
 	public static boolean compare(ArrayList<Position> tals, Position tal){
 		
 		int i;
@@ -408,7 +423,7 @@ public class Main{
 		
 	}
 	
-	// Função start: aqui funciona a lógica do agente
+	// Função start: aqui funciona o raciocínio do agente.
 	public static char[][] start(char ambiente[][]){
 		
 		int r=-1, c=-1;
@@ -418,6 +433,7 @@ public class Main{
 				if(ambiente[i][j]=='G'){
 					r = i;
 					c = j;
+					// Obtido a posição atual do agente.
 				}
 			}
 		}
@@ -428,10 +444,13 @@ public class Main{
 		p.col=c;
 		
 		if(brizas[p.row][p.col]=='B'){
+			// Se na posição do agente existe uma brisa, essa condição é aceita.
 			
 			if(!compare(areas_seguras, p)){
 				
 				areas_seguras.add(p);
+				
+				// Se tem uma brisa, deve-se então supor áreas perigosas, é o que vai ser feito abaixo.
 				
 				Position te = new Position();
 				
@@ -490,8 +509,6 @@ public class Main{
 			}
 		}
 		
-		
-		
 		if(brizas[p.row][p.col]=='F'){
 			if(!compare(areas_seguras, p)){
 				areas_seguras.add(p);
@@ -500,11 +517,15 @@ public class Main{
 		
 		if(brizas[p.row][p.col]!='B' && ambiente[p.row][p.col]!='F' && brizas[p.row][p.col]=='-'){
 			
+			// Na aceitação dessa condição, tem-se que a posição atual do agente tem '-', que é
+			// um símbolo que representa nenhum perigo, mas sim área segura.
+			
 			if(!compare(areas_seguras, p)){
 				areas_seguras.add(p);
 			}
 			
-			// Pode-se fazer algumas inferências com o ambiente
+			// Como a posição atual tem '-', pode-se fazer algumas inferências com o ambiente,
+			// encontrando novas posições seguras conforme a posição atual.
 			
 			if(p.col>0){
 				
@@ -556,6 +577,7 @@ public class Main{
 		else{
 			
 			if(brizas[p.row][p.col]=='B'){
+				// Inserir áreas perigosas
 				
 				if(p.col>0){
 					
@@ -627,6 +649,8 @@ public class Main{
 			for(int j=0; j<4; j++){
 				
 				if(ambiente2[i][j]=='-' && ambiente[i][j]=='G'){
+					
+						// Adicionando áreas seguras.
 						
 						if(p.col>0){
 							
@@ -678,6 +702,7 @@ public class Main{
 		}
 		
 		if(brizas[p.row][p.col]=='B'){
+			// Dentro desse condicional, é criada a imaginação dos poços.
 			
 			imaginacaoPocos[p.row][p.col]='B';
 			
@@ -699,6 +724,8 @@ public class Main{
 			
 		}
 		
+		// Estrutura de condicional composta voltada para construir a imaginação do agente sobre
+		// os poços.
 		if(ambiente2[p.row][p.col]=='-'){
 			imaginacaoPocos[p.row][p.col] = '-';
 		}
@@ -711,29 +738,38 @@ public class Main{
 		}
 		
 		for(int i=0; i<4; i++){
+			
 			for(int j=0; j<4; j++){
+				
 				if(imaginacaoPocos[i][j]=='-'){
 					
 					if(j<3 && imaginacaoPocos[i][j+1]=='0'){
+						// O caractere '0' representa dúvida
 						imaginacaoPocos[i][j+1] = 'N';
+						// N de nada na posição.
 					}
 					
 					if(j>0 && imaginacaoPocos[i][j-1]=='0'){
 						imaginacaoPocos[i][j-1] = 'N';
+						// N de nada na posição.
 					}
 					
 					if(i>0 && imaginacaoPocos[i-1][j]=='0'){
 						imaginacaoPocos[i-1][j] = 'N';
+						// N de nada na posição.
 					}
 					
 					if(i<3 && imaginacaoPocos[i+1][j]=='0'){
 						imaginacaoPocos[i+1][j] = 'N';
+						// N de nada na posição.
 					}	
 				}	
 			}
 		}
 		
 		if(fedor[p.row][p.col]=='F'){
+			
+			// Neste condicional é montada a imaginação do agente sobre o Wumpus
 			
 			imaginacaoWumpus[p.row][p.col]='F';
 			
@@ -755,6 +791,8 @@ public class Main{
 			
 		}
 		
+		// Estrutura de condicional composta voltada para construir a imaginação do agente sobre
+		// a localização do Wumpus.
 		if(ambiente2[p.row][p.col]=='-'){
 			imaginacaoWumpus[p.row][p.col] = '-';
 		}
@@ -771,25 +809,33 @@ public class Main{
 				if(imaginacaoWumpus[i][j]=='-'){
 					
 					if(j<3 && imaginacaoWumpus[i][j+1]=='0'){
+						// O caractere '0' representa posição em dúvida.
 						imaginacaoWumpus[i][j+1] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
 					}
 					
 					if(j>0 && imaginacaoWumpus[i][j-1]=='0'){
 						imaginacaoWumpus[i][j-1] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
 					}
 					
 					if(i>0 && imaginacaoWumpus[i-1][j]=='0'){
 						imaginacaoWumpus[i-1][j] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
 					}
 					
 					if(i<3 && imaginacaoWumpus[i+1][j]=='0'){
 						imaginacaoWumpus[i+1][j] = 'N';
+						// Já o caractere 'N' representa que na posição não tem nada.
 					}	
 				}	
 			}
 		}
 		
 		if(ambiente2[p.row][p.col]=='F'){
+			
+			// Se for encontrado um fedor, então se pode encontrar e indicar áreas perigosas
+			// conforme a posição atual do agente.
 			
 			if(p.row>0){
 				
@@ -842,7 +888,13 @@ public class Main{
 			}
 			
 		}
-			
+
+		if(!compare(areas_visitadas, p))
+			areas_visitadas.add(p);
+		// Adiciona-se a posição atual nas áreas visitadas.
+		
+		// Neste laço, remove-se as áreas que estão no array areas_perigosas que
+		// já foram visitadas.
 		for(int i=0; i<areas_perigosas.size(); i++){
 				
 				Position temp = areas_perigosas.get(i);
@@ -856,16 +908,11 @@ public class Main{
 					}
 					
 				}
-				
 		}
 		
-		if(!compare(areas_visitadas, p))
-			areas_visitadas.add(p);
-		
-		// Então agora vamos movimentar o agente
+		// A partir de agora, vamose movimentar o agente.
 		
 		int countWumpus=0;
-		
 		int count_fedor=0;
 		
 		ArrayList<Position> pontos = new ArrayList<Position>();
@@ -890,6 +937,8 @@ public class Main{
 		}
 		
 		if(count_fedor==2){
+			
+			// Com identificação de duas posições com fedor, o agente já pode descobrir a posição do Wumpus.
 			
 			Position ponto1 = pontos.get(0);
 			Position ponto2 = pontos.get(1);
@@ -925,6 +974,8 @@ public class Main{
 				
 			}
 			
+			// Após essa função, apenas um símbolo 'W' estará presente na matriz imaginacaoWumpus.
+			
 		}
 		
 		for(int i=0; i<4; i++){
@@ -935,6 +986,7 @@ public class Main{
 					countWumpus++;
 					xWumpus =  i;
 					yWumpus = j;
+					// Pega a posição do Wumpus
 				}
 				
 			}
@@ -948,16 +1000,17 @@ public class Main{
 			ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 			
 			ambiente[xWumpus][yWumpus] = 'G';
+			// Guerreiro fica onde o Wumpus estava anteriormente.
 			
 			matou=true;
-			
-			status = status - 10;
 			
 			Position Wumpus = new Position();
 			Wumpus.row = xWumpus;
 			Wumpus.col = yWumpus;
 			
 			areas_seguras.add(Wumpus);
+			
+			// A posição do Wumpus morto ganha o símbolo '-', assim como as posições adjacentes.
 			
 			ambiente2[xWumpus][yWumpus] = '-';
 			
@@ -990,6 +1043,7 @@ public class Main{
 				for(int j=0; j<4; j++){
 					
 					imaginacaoWumpus[i][j]='0';
+					// O vetor imaginacaoWumpus é zerado, pois não será mais necessário.
 					
 				}
 				
@@ -1182,7 +1236,7 @@ public class Main{
 			
 		}
 		
-		// Neste for removemos áreas seguras que podem estar nas áreas consideradas perigosas
+		// Neste for removemos áreas seguras que podem estar nas áreas consideradas perigosas.
 		
 		for(int i=0; i<areas_seguras.size(); i++){
 			
@@ -1198,6 +1252,8 @@ public class Main{
 			}
 			
 		}
+		
+		// Impressão feita ao usuário.
 		
 		System.out.println("Medida de Desempenho: "+status);
 		
@@ -1219,7 +1275,7 @@ public class Main{
 		}
 		System.out.println(" ");
 		
-		// Então agora vamos movimentar o agente
+		// Vamos movimentar a posição do agente.
 		
 				Position novo = new Position();
 				
@@ -1279,6 +1335,8 @@ public class Main{
 					
 				}
 				
+				// Depois de encontrada as áreas possíveis de movimentação, elas são mostradas para o usuário.
+				
 				System.out.print("Áreas possíveis de movimentação: ");
 				
 				for(int i=0; i<areas_possiveis.size(); i++){
@@ -1295,12 +1353,16 @@ public class Main{
 					
 					if(!compare(areas_visitadas, current) && compare(areas_seguras, current) && !compare(areas_perigosas, current)){
 						
+						// Se a posição possível não é uma área visitada, e é uma área segura, ou seja, não considerada perigosa, então o agente se locomove para
+						// essa posição possível.
+						
 						System.out.println("Estou me movimentando para uma área que sei que é segura.");
 						
 						ambiente[p.row][p.col] = ambiente2[p.row][p.col];
 						ambiente[current.row][current.col] = 'G';
 						
 						return ambiente;
+						// Neste momento, esta função termina.
 						
 					}
 					
@@ -1309,9 +1371,13 @@ public class Main{
 				System.out.println("Neste momento não sei para onde ir!");
 				
 				// Guerreiro não sabe para onde ir
-				// Então ele escolhe uma das áreas seguras
+				// Então ele escolhe uma das áreas possíveis de forma aleatória.
 					
 				if(!is_different(areas_seguras, areas_possiveis)){
+					
+					// Se ass áreas seguras são iguais às áreas possíveis, ou seja,
+					// não se tem mais uma área considerada segura que não foi visitada,
+					// então só resta o agente escolher ao acaso, uma nova posição.
 					
 					System.out.println("Vou escolher ao acaso. Então me deseja sorte.");
 					
@@ -1332,10 +1398,17 @@ public class Main{
 						}
 						
 					}
+					
+					if(areas_possiveis.size()==0){
+						int pos = random(areas_perigosas.size());
+						areas_possiveis.add(areas_perigosas.get(pos));
+					}
 							
 					int pos = random(areas_possiveis.size());
+					// Posição aleatória.
 							
 					Position nova = areas_possiveis.get(pos);
+					// Nova posição escolhida para o usuário.
 					
 					if(nova.row==p.row && nova.col==p.col){
 						
@@ -1357,6 +1430,7 @@ public class Main{
 				else{
 						
 						// Encontrar a posição final segura
+						// O guerreiro ainda tem uma posição segura em que ainda não foi visitada.
 					
 						System.out.println("Mas existe ainda uma posição segura que conheço.");
 					
@@ -1409,6 +1483,7 @@ public class Main{
 		
 	}
 	
+	// Esta função fica responsável por atualizar o status do jogo.
 	public static boolean verify(char ambiente[][]){
 		
 		int row=-1, col=-1;
@@ -1437,6 +1512,10 @@ public class Main{
 			System.out.println("Guerreiro encontrou o ouro!");
 			status = status+1000;
 			return true;
+		}
+		
+		if(matou){
+			status = status - 10;
 		}
 		
 		return false;
