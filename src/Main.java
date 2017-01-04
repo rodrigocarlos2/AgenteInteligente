@@ -76,9 +76,9 @@ public class Main{
 		
 	}
 	
-	// Função initAmbiente: inicia o ambiente, colocando o Wumpus, Agente, brisas, Fedor e Poços nos seus lugares.
+	// Função init: inicia o ambiente, colocando o Wumpus, Agente, brisas, Fedor e Poços nos seus lugares.
 	// O ambiente é gerado randomicamente, conforme pedido feito na descrição do trabalho na disciplina.
-	public static void initAmbiente(char ambiente[][]){
+	public static void init(char ambiente[][]){
 		
 		for(int i=0; i<4; i++){
 			for(int j=0; j<4; j++){
@@ -354,7 +354,7 @@ public class Main{
 		}
 		
 	}
-	// Fim da função initAmbiente
+	// Fim da função init
 	
 	// Se os dois arrays passados por parâmetro forem diferentes, a função retorna true.
 	// Senão retorna false.
@@ -1561,7 +1561,7 @@ public class Main{
 		}
 		
 		// Iniciando o ambiente Wumpus´s World
-		initAmbiente(ambiente);
+		init(ambiente);
 		
 		// Nestes for's um ambiente estático é criado para a aplicação
 		// ambiente background
