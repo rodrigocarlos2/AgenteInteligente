@@ -1697,7 +1697,6 @@ public class Main{
 		}
 		
 		return false;
-		
 	}
 	
 	public static void main(String args[]){
@@ -1767,6 +1766,18 @@ public class Main{
 			
 			// Aqui o movimento do agente 'Guerreiro' é realizado
 			ambiente = start(ambiente);
+							
+			if(ambiente[3][0]!='G'){
+				if(fedor[3][0]=='F'){
+					ambiente[3][0]  = 'F';
+				}
+				else if(brisas[3][0]=='B'){
+					ambiente[3][0]  = 'B';
+				}
+				else if(brilho[3][0]=='R'){
+					ambiente[3][0] = 'R';
+				}
+			}
 			
 			status--;
 			
